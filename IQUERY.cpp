@@ -3,18 +3,18 @@
 #define mod 1000000007
 using namespace std;
 
-ll arr[100005],ans,cn[50];
+ll arr[100005],ans,cn[20];
 
 struct Tree{
-    ll sum,cnt[50];
-}tree[5*100005];
+    ll sum,cnt[20];
+}tree[3*100005];
 
 void BuildTree(ll node,ll i,ll j)
 {
     if (i==j)
     {
         tree[node].sum = arr[j];
-        for (ll l=0;l<=35;l++) tree[node].cnt[l] = 0;
+        for (ll l=0;l<=17;l++) tree[node].cnt[l] = 0;
         ll tmp = arr[j],l = 0;
         while(tmp!=0)
         {
@@ -32,7 +32,7 @@ void BuildTree(ll node,ll i,ll j)
     BuildTree(rgt,mid+1,j);
 
     tree[node].sum = ((tree[lft].sum+1)*(tree[rgt].sum+1)-1)%mod;
-    for (ll l=0;l<=35;l++) tree[node].cnt[l] = tree[lft].cnt[l] + tree[rgt].cnt[l];
+    for (ll l=0;l<=17;l++) tree[node].cnt[l] = tree[lft].cnt[l] + tree[rgt].cnt[l];
 }
 
 void update(ll node,ll i,ll j,ll loc,ll val)
@@ -42,7 +42,7 @@ void update(ll node,ll i,ll j,ll loc,ll val)
     if (i==j&&i==loc)
     {
         tree[node].sum = val;
-        for (ll l=0;l<=35;l++) tree[node].cnt[l] = 0;
+        for (ll l=0;l<=17;l++) tree[node].cnt[l] = 0;
         ll tmp = val,l = 0;
         while(tmp!=0)
         {
@@ -60,7 +60,7 @@ void update(ll node,ll i,ll j,ll loc,ll val)
     update(rgt,mid+1,j,loc,val);
 
     tree[node].sum = ((tree[lft].sum+1)*(tree[rgt].sum+1)-1)%mod;
-    for (ll l=0;l<=35;l++) tree[node].cnt[l] = tree[lft].cnt[l] + tree[rgt].cnt[l];
+    for (ll l=0;l<=17;l++) tree[node].cnt[l] = tree[lft].cnt[l] + tree[rgt].cnt[l];
 }
 
 void query(ll node,ll i,ll j,ll l,ll r,ll tpe)
@@ -71,7 +71,7 @@ void query(ll node,ll i,ll j,ll l,ll r,ll tpe)
         if (tpe==1)
             ans = ((ans+1)*(tree[node].sum+1)-1)%mod;
         else
-            for (ll k=0;k<=35;k++) cn[k]+=tree[node].cnt[k];
+            for (ll k=0;k<=17;k++) cn[k]+=tree[node].cnt[k];
         return;
     }
 
@@ -113,9 +113,9 @@ int main ()
             else if (type[0]=='A')
             {
                 ans = 0;
-                for (ll l=0;l<=35;l++) cn[l] = 0;
+                for (ll l=0;l<=17;l++) cn[l] = 0;
                 query(1,1,N,L,R,2);
-                for (ll l=35;l>=0;l--)
+                for (ll l=17;l>=0;l--)
                     ans = (ans*2+pwr[cn[l]])%mod;
                     ///cout<<l<<" "<<pwr[cn[l]]<<endl;
                 printf("%lld\n",ans);
